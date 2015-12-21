@@ -3,7 +3,7 @@ public class NumArray {
     private int[] ints;
     
     public NumArray(int[] nums) {
-	sumCache = new int[1 + nums.length];
+	sumCache = new int[nums.length];
 	ints = new int[nums.length];
 	int p = 0;
 
