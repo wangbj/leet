@@ -1,8 +1,11 @@
 import Control.Monad.Identity
 import Control.Monad
+import Control.Monad.Trans
 import Text.Parsec.Prim
 import Text.Parsec.Combinator
 import Text.Parsec.Char
+
+import System.Environment
 
 data Expr =     Lit Int
               | Add !Expr !Expr
@@ -58,3 +61,8 @@ stmts = do
   return e
 
 buildExpr = runIdentity . runParserT stmts 0 "<input>"
+
+main = liftM (fmap eval . buildExpr . concat)  getArgs  >>= \ei ->
+  case ei of
+    Left e -> putStrLn (show e)
+    Right res -> print res
