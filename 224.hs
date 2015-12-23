@@ -7,7 +7,7 @@ import Text.Parsec.Char
 
 import System.Environment
 
-data Expr =     Lit Int
+data Expr =     Lit !Int
               | Add !Expr !Expr
               | Sub !Expr !Expr
               | Parens !Expr
