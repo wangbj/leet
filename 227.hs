@@ -18,7 +18,8 @@ readop = uncons . dropWhile isSpace
 acc lhs s = go lhs s `mplus` Just lhs
   where go lhs s = readop s >>= \(op, s1) -> case op of
           '+' -> fmap (lhs + ) (eval s1)
-          '-' -> fmap (lhs - ) (eval s1)
+          '-' -> readint s1 >>= \(rhs1, s1') ->
+            fmap (lhs +) (acc (-rhs1) s1')
           _ -> readint s1 >>= \(rhs, s2) ->
             case op of
               '*' -> acc (lhs * rhs) s2
