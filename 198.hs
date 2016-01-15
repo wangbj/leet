@@ -5,4 +5,5 @@ maxp (x:y:zs) = case maxp (y:zs) of
   (Just r1, Just r2) -> let x' = x + r2
                             y' = r1
                         in if x' > y' then (Just x', Just y') else (Just y', Just y')
-  
+
+rob = uncurry max .  maxp
