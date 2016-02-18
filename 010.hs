@@ -4,17 +4,17 @@ import Control.Monad.Identity
 import Data.Either
 
 dot = do
-  r <- anyChar
-  return (pure r)
+  _ <- anyChar
+  return ()
 
 regular c = do
-  r <- char c
-  return (pure r)
+  _ <- char c
+  return ()
 
 star c = do
   let p = if c == '.' then anyChar else char c
-  r <- many p
-  return r
+  _ <- many p
+  return ()
 
 compileHelper = sequence_ . reverse . go . reverse
   where go [] = []
