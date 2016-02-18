@@ -1,12 +1,7 @@
 {-# LANGUAGE FlexibleContexts #-}
-
-module Main where
-
 import Text.Parsec
-import Control.Monad
-import Control.Monad.State
 import Control.Monad.Identity
-import Data.Monoid
+import Data.Either
 
 dot = do
   r <- anyChar
@@ -31,7 +26,4 @@ compileHelper = sequence_ . reverse . go . reverse
 compile s = compileHelper s >> eof
 
 match :: String -> String -> Bool
-
-match s p = case runIdentity (runParserT (compile p) 0 "<stdin>" s) of
-  Left _ -> False
-  Right _ -> True
+match s p = isRight . runIdentity . runParserT (compile p) 0 "<stdin>" $ s
