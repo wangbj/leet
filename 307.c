@@ -56,7 +56,7 @@ void update(struct NumArray* numArray, int i, int val) {
   int x = val - numArray->nums[i];
   numArray->nums[i] = val;
 
-  while (j > 0 && j <= numArray->size) {
+  while (j <= numArray->size) {
     numArray->vect[j] += x;
     // printf("update vect[%d] = %ld\n", j, numArray->vect[j]);
     j = next(j);
