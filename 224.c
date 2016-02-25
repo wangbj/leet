@@ -1,46 +1,41 @@
-#include <string.h>
-#include <stdio.h>
-
 #define STACK_SIZE 1024
 
-static int parens[STACK_SIZE];
-static int parens_head = 0;
+static long parens[STACK_SIZE];
+static long parens_head = 0;
 
-static int eval(char* s)
+int calculate(char* s)
 {
-  int i, x, acc = 0;
-  char* p;
-  int status = 0;
-  int sign = 1;
-
-  for (i = 0; i < STACK_SIZE; i++) {
-    parens[i] = 1;
-  }
+  int acc = 0;
+  int sign = 0;
 
   while (*s != '\0') {
     if (*s == ' ' || *s == '\t') {
       ++s;
-    } else if (*s == '(') {
+      continue;
+    } if (*s == '(') {
       ++parens_head;
-      if (sign == 1) {
+      if (sign == 0) {
 	parens[parens_head] = parens[parens_head-1];
       } else {
-	parens[parens_head] = -parens[parens_head-1];
+	parens[parens_head] = ~parens[parens_head-1];
       }
-      sign = 1;
+      sign = 0; /* open paren, current level of signess start from scratch */
       ++s;
     } else if (*s == '+') {
-      sign = 1;
-      ++s;
+      sign = 0;
+      ++s;      
     } else if (*s == '-') {
       sign = -1;
-      ++s;
+      ++s;      
     } else if (*s == ')') {
       --parens_head;
-      ++s;
+      ++s;      
     } else {
-      x = strtoul(s, &p, 10);
-      s = p;
+      char* p;
+      int x = 0;
+      while(*s >= '0' && *s <= '9') {
+	x = 10*x + *s++ - '0';
+      }
       if (sign != parens[parens_head]) {
 	acc -= x;
       } else {
@@ -49,9 +44,4 @@ static int eval(char* s)
     }
   }
   return acc;
-}
-
-int calculate(char* s)
-{
-  return eval(s);
 }
