@@ -20,7 +20,7 @@ static int eval(char* s)
   while (*s != '\0') {
     if (*s == ' ' || *s == '\t') {
       ++s;
-    } if (*s == '(') {
+    } else if (*s == '(') {
       ++parens_head;
       if (sign == 1) {
 	parens[parens_head] = parens[parens_head-1];
