@@ -8,7 +8,7 @@ int** generateMatrix(int n) {
         int colStart = 0, colEnd = n-1;
         int ** res;
 
-        if (n == 0) return NULL;
+        if (n <= 0) return NULL;
 
         res = (int**)calloc(n, sizeof(int*));
         for (i = 0; i < n; i++) {
