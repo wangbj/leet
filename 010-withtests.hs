@@ -61,7 +61,7 @@ match' s t = s =~ t
 testsize=500
 
 main = defaultMain [
-  bgroup "match" [  bench "1" $ whnf (match (replicate testsize 'a')) ('a': replicate (succ testsize) '.')
-                  , bench "2" $ whnf (match' (replicate testsize 'a')) ('a': replicate (succ testsize) '.')
+  bgroup "match" [  bench "1" $ whnf (match (replicate testsize 'a')) ('a': replicate (pred testsize) '.')
+                  , bench "2" $ whnf (match' (replicate testsize 'a')) ('a': replicate (pred testsize) '.')
                  ]
   ]
