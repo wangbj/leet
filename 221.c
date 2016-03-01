@@ -38,30 +38,27 @@ int maximalSquare(char** matrix, int rows, int cols) {
 
     for (i = 0; i < rows; i++) {
         for (j = 0; j < cols; j++) {
-            if (matrix[i][j] == '1') {res[i][j] = 1; r = 1;}
+            if (matrix[i][j] == '1') {res[i][j] = 1; }
         }
     }
 
     for (i = 1; i < rows; i++) {
         for (j = 1; j < cols; j++) {
             if (matrix[i][j] == '1') {
-                for (int k = 1; k <= min(i, j); k++) {
-                    int t1, t2, t3, t;
-                    t1 = res[i-k][j-k];
-                    t2 = min(t1, res[i-k][j]);
-                    t3 = min(t2, res[i][j-k]);
-                    t = 1 + t3;
-                    if (t > res[i][j]) {
-                        res[i][j] = t;
-                    } else {
-                        break;
-                    }
-                }
-                r = max(r, res[i][j]);
+                int t;
+                t = min(res[i-1][j-1], res[i-1][j]);
+                res[i][j] = 1 + min(t, res[i][j-1]);
+            } else {
+                res[i][j] = 0;
             }
         }
     }
     
+    for (i = 0; i < rows; i++) {
+        for (j = 0; j < cols; j++) {
+            if (res[i][j] > r) r = res[i][j];
+        }
+    }
     free2d(res, rows, cols);
 
     return (r*r);
