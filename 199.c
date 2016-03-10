@@ -49,15 +49,6 @@ static int empty(struct queue* Q)
   return Q->head == Q->tail;
 }
 
-static int queue_size(struct queue* Q)
-{
-  if (Q->tail > Q->head) {
-    return Q->tail - Q->head;
-  } else {
-    return MAXQ - Q->head + Q->tail;
-  }
-}
-
 static queue_element_t pop_front(struct queue* Q)
 {
   queue_element_t x = Q->queue[Q->head++];
