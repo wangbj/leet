@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #ifdef TEST
 /**
@@ -15,10 +16,8 @@ struct TreeNode {
 #endif
 
 struct TreeNodeLabeled {
-  int label;  
-  int val;
-  struct TreeNode* left;
-  struct TreeNode* right;
+  int label;
+  struct TreeNode* node;
 };
 
 #define MAXQ 8192
@@ -32,16 +31,13 @@ struct queue {
 
 struct TreeNodeLabeled* labNode(struct TreeNode* node, int label)
 {
-  struct TreeNodeLabeled* lab = (struct TreeNodeLabeled*)malloc(sizeof(struct TreeNodeLabeled));
+  struct TreeNodeLabeled* lab = (struct TreeNodeLabeled*)calloc(1, sizeof(struct TreeNodeLabeled));
   lab->label = label;
-  lab->val = node->val;
-  lab->left = node->left;
-  lab->right = node->right;
-
+  lab->node = node;
   return lab;
 }
 
-static void push_back(struct queue* Q, struct TreeNodeLabeled* x)
+static void push_back(struct queue* Q, queue_element_t x)
 {
   Q->queue[Q->tail++] = x;
 
@@ -62,9 +58,9 @@ static int queue_size(struct queue* Q)
   }
 }
 
-static struct TreeNodeLabeled* pop_front(struct queue* Q)
+static queue_element_t pop_front(struct queue* Q)
 {
-  struct TreeNodeLabeled *x = Q->queue[Q->head++];
+  queue_element_t x = Q->queue[Q->head++];
 
   if (Q->head >= MAXQ) Q->head = 0;
 
@@ -77,7 +73,7 @@ struct vector {
   int size_allocated;
 };
 
-#define BLKSIZ 4096
+#define BLKSIZ 256
 
 void push(struct vector* v, int x)
 {
@@ -98,17 +94,17 @@ void bfs(struct queue* Q, struct vector* vect)
   t = pop_front(Q);
 
   if (t->label > vect->size) {
-    push(vect, t->val);
+    push(vect, t->node->val);
   }
 
   next = 1 + t->label;
-  if (t->right) {
-    r = labNode(t->right, next);
+  if (t->node->right) {
+    r = labNode(t->node->right, next);
     push_back(Q, r);
   }
   
-  if (t->left) {
-    l = labNode(t->left, next);
+  if (t->node->left) {
+    l = labNode(t->node->left, next);
     push_back(Q, l);
   }
 
