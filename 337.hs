@@ -4,7 +4,7 @@ import Data.Monoid
 
 data BTree a = Leaf | Branch a (BTree a) (BTree a) deriving (Show, Functor)
 
-maxValue Leaf = Sum 0
+maxValue Leaf = mempty
 maxValue (Branch x Leaf Leaf) = Sum x
 maxValue (Branch x Leaf right@(Branch y l r)) = max (maxValue right) (Sum x <> maxValue l <> maxValue r)
 maxValue (Branch x left@(Branch y l r) Leaf) = max (maxValue left) (Sum x <> maxValue l <> maxValue r)
