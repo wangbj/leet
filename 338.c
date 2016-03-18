@@ -3,7 +3,7 @@
  * Note: The returned array must be malloced, assume caller calls free().
  */
 int* countBits(int num, int* size) {
-  int *v, i, j;
+  int *v, i;
   
   v = (int*)calloc(1+num, sizeof(int));
   v[0] = 0;
