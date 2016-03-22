@@ -1,5 +1,4 @@
 {-# LANGUAGE BangPatterns #-}
-import qualified Data.ByteString.Char8 as C
 import qualified Data.Sequence as Seq
 import qualified Data.Foldable as F
 import qualified Data.Set as Set
@@ -7,17 +6,11 @@ import Data.Sequence(Seq)
 import Data.Set(Set)
 import Control.Monad.State
 import Control.Monad.Reader
-import Control.Monad.Identity
 import Data.Array.Unboxed
 import Control.Monad
 import Control.Monad.Writer
-import Control.Monad.RWS
-import Data.Maybe
-import Data.Monoid
 
-type Graph = UArray (Int, Int) Char
-
-zr :: StateT Int (Reader (Int, Int)) [(Int, Int)] -- there exist easier ways, just for fun
+zr :: StateT Int (Reader (Int, Int)) [(Int, Int)] -- there are easier ways, just for fun
 zr = do
   k <- get
   (rows, cols) <- ask
@@ -37,7 +30,6 @@ mkGraph words = array ((1,1),(rows, cols)) elems :: UArray (Int, Int) Char
 
 words1 = ["oath", "pea", "eat", "rain"]
 dict1 = [ "oaan", "etae", "ihkr", "iflv" ] :: [String]
-gr1 = mkGraph dict1
 
 -- find adjcent nodes 
 nexts (x, y) rows cols = filter (uncurry valid) $ [ (x-1, y), (x+1, y), (x, y-1), (x, y+1)]
@@ -58,6 +50,7 @@ dfsMatchHelper res@(matched, candidates) g v p
         !c = g ! p
 
 dfsMatch words g s = execWriter (dfsMatchHelper ("", words) g (noneVisited g) s)
+  where noneVisited = amap (\_ -> False)
 
 wordSearch words dict = Set.toList . foldl acc Set.empty $ indices
   where g = mkGraph dict
@@ -66,10 +59,7 @@ wordSearch words dict = Set.toList . foldl acc Set.empty $ indices
         acc l s
           | Seq.null r = l
           | otherwise = l `Set.union` (Set.fromList (F.toList r))
-          where r = dfsMatch words g s
-
-noneVisited :: UArray (Int, Int) Char -> UArray (Int, Int) Bool
-noneVisited = amap (\_ -> False)
+          where !r = dfsMatch words g s
 
 -- wordSearch words1 dict1
 -- ["eat","oath"]
