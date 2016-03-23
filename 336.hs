@@ -1,12 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE MultiWayIf #-}
-
 import qualified Data.ByteString.Char8 as C
 import qualified Data.HashMap.Strict as HashMap
 import Data.HashMap.Strict(HashMap)
 import Data.Monoid
 import Data.Maybe
-import Data.List
 
 isPalin s = s == C.reverse s
 isPalin2 s t = isPalin (s <> t)
@@ -39,8 +37,7 @@ pairMe hash (i, s) = catMaybes ( matchFull hash (i, s) s : map (matchPrefix hash
   where prefixies = init . tail . C.inits $ s
         suffixes = tail . init . C.tails $ s
 
-ppairs s = concatMap (pairMe hash) paired
+ppairs s = concatMap (pairMe hash) . zip [0..] $ s
   where hash = HashMap.fromList (zip s [0..])
-        paired = zip [0..] s
 
 main = C.getContents >>= print . ppairs . C.words
